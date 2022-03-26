@@ -5,7 +5,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
     const { username, password } = req.body;
 
-    const serverFetch = await fetch("http://127.0.0.1:3002/api/v1/user/login", {
+    const serverFetch = await fetch("http://127.0.0.1:3002/api/user/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

@@ -6,7 +6,6 @@ import {
 } from "./food.interface";
 
 class FoodService {
-  // public DB: string;
   constructor() {
     const DB =
       "mongodb+srv://peterfulop_:MgIK3MQKQuC10xTN@clusterfoodproject.qrpy7.mongodb.net/myFirstDatabase";

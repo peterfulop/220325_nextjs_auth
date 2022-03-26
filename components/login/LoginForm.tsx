@@ -14,7 +14,7 @@ const LoginForm = () => {
   const onLogin = async (event: SyntheticEvent): Promise<any> => {
     event?.preventDefault();
 
-    const res = await fetch("/api/login", {
+    const res = await fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({
@@ -22,6 +22,8 @@ const LoginForm = () => {
         password,
       }),
     });
+
+    console.log(res);
 
     // const data = await res.json();
     // console.log(data);

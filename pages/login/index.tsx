@@ -3,7 +3,7 @@ import LoginForm from "../../components/login/LoginForm";
 
 const Login = () => {
   const getFoods = async () => {
-    const res = await fetch("/api/get-all-foods");
+    const res = await fetch("/api/foods");
     const data = await res.json();
     console.log(data);
   };

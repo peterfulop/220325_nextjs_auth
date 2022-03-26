@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import FoodController from "../../../server/resources/food/food.controller";
-
+import FoodService from "../../../server/resources/food/food.service";
 export default async function getFoods(
   req: NextApiRequest,
   res: NextApiResponse
@@ -8,9 +7,8 @@ export default async function getFoods(
   if (req.method === "GET") {
     try {
       const { id } = req.query as { id: string };
-
-      const fc = new FoodController();
-      const result = await fc.getOne(id);
+      const fs = new FoodService();
+      const result = await fs.getFood(id);
       res.status(200).json({ data: result });
     } catch (err) {
       res.status(500).json({ error: "failed to fetch data" });
