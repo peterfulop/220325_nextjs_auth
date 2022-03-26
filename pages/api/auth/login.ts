@@ -4,9 +4,9 @@ import Request from "../../../utils/interfaces/Request.interface";
 import { createSendToken } from "../../../utils/token";
 import withValidation from "../../../middleware/withValidation.middleware";
 import validation from "../../../server/resources/user/user.validation";
-import withErrorHandlingMiddleware from "../../../middleware/withErrorHandling.middleware";
+import withoutProtect from "../../../middleware/withoutProtect.middleware";
 
-export default withErrorHandlingMiddleware.post(
+export default withoutProtect.post(
   withValidation(async (req: Request, res: NextApiResponse) => {
     try {
       const { username, password } = req.body;

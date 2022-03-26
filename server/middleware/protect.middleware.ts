@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../resources/user/user.model";
 import { verifyToken } from "../../utils/token";
-import ErrorMiddleware from "../../middleware/withErrorHandling.middleware";
 
 export const protect = async (
   req: Request,

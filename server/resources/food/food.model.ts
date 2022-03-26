@@ -5,6 +5,7 @@ const FoodSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, "A food must have a name!"],
+      unique: true,
       trim: true,
     },
     details: {
@@ -25,6 +26,5 @@ const FoodSchema = new mongoose.Schema(
   }
 );
 
-// const Food = mongoose.model("Food", FoodSchema);
 const Food = mongoose.models.Food || mongoose.model("Food", FoodSchema);
 export default Food;

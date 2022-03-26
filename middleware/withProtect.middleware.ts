@@ -2,45 +2,39 @@ import { NextApiResponse } from "next";
 import { verifyToken } from "../utils/token";
 import User from "../server/resources/user/user.model";
 import Request from "../utils/interfaces/Request.interface";
+import nextConnect from "next-connect";
+import ErrorObject from "../utils/interfaces/error.interface";
+import setErrorDetails from "../utils/errorDetails";
 
-const protect = (handler: Function) => {
-  return async (req: Request, res: NextApiResponse) => {
-    try {
-      let token: string | undefined;
-      console.log("protected rout!");
+const withProtect = nextConnect<Request, NextApiResponse>({
+  onError(error, req, res) {
+    const errorObj: ErrorObject = setErrorDetails(error);
+    res.status(errorObj.statusCode).send({
+      error: errorObj.errorMessage,
+      statusCode: errorObj.statusCode,
+    });
+  },
+  onNoMatch(req, res) {
+    res.status(500).send({
+      error: "Something went wrong",
+    });
+  },
+}).use(async (req: Request, res: NextApiResponse, next) => {
+  let token: string | undefined;
+  console.log("protected middleware rout!");
+  if (req.cookies && req.cookies.jwt) {
+    token = req.cookies.jwt;
+  }
+  if (!token) {
+    throw new Error("notoken");
+  }
+  const decoded = await verifyToken(token);
+  const activeUser = await User.findById(Object(decoded).id);
+  if (!activeUser) {
+    throw new Error("nouser");
+  }
+  req.user = activeUser;
+  next();
+});
 
-      if (req.cookies && req.cookies.jwt) {
-        token = req.cookies.jwt;
-      }
-
-      if (!token) {
-        // throw new Error("notoken");
-        return res.status(401).json({
-          success: false,
-          message: "Invalid token, please log in!",
-        });
-      }
-      const decoded = await verifyToken(token);
-      const activeUser = await User.findById(Object(decoded).id);
-      if (!activeUser) {
-        //throw new Error("nouser");
-        return res.status(401).json({
-          success: false,
-          message: "The user belong to this token no longer exists",
-        });
-      }
-
-      req.user = activeUser;
-
-      return handler(req, res);
-    } catch (error: any) {
-      //   ErrorMiddleware(error, req, res, handler);
-      return res.status(401).json({
-        success: false,
-        message: "Please login to get access",
-      });
-    }
-  };
-};
-
-export default protect;
+export default withProtect;

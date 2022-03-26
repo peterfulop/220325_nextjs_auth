@@ -68,6 +68,7 @@ class FoodService {
   public async getFood(id: string): Promise<FoodEntryCreateOptions> {
     try {
       const food = await Food.findById(id);
+      if (!food) throw new Error("nodata");
       return food;
     } catch (error: any) {
       throw new Error(error.message);

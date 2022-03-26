@@ -21,9 +21,7 @@ const foodDetailsValidation = (
   return details;
 };
 
-const create = Joi.object({
+export const create = Joi.object({
   name: Joi.string().required(),
   details: Joi.object().custom(foodDetailsValidation),
 });
-
-export default { create };

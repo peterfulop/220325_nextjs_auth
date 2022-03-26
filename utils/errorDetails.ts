@@ -1,7 +1,5 @@
 import HttpExceptions from "../exceptions/http.exception";
-import ErrorObject from "../utils/interfaces/error.interface";
-import { NextApiResponse } from "next";
-import nextConnect from "next-connect";
+import ErrorObject from "./interfaces/error.interface";
 
 const setErrorDetails = (error: HttpExceptions): ErrorObject => {
   let errorMessage: string = "Internal server error!";
@@ -36,19 +34,4 @@ const setErrorDetails = (error: HttpExceptions): ErrorObject => {
   return { errorMessage, statusCode };
 };
 
-export default nextConnect<Request, NextApiResponse>({
-  onError(error, req, res) {
-    console.log("this is onError:", error);
-
-    const errorObj: ErrorObject = setErrorDetails(error);
-    res.status(errorObj.statusCode).send({
-      error: errorObj.errorMessage,
-      statusCode: errorObj.statusCode,
-    });
-  },
-  onNoMatch(req, res) {
-    res.status(500).send({
-      error: "Something went wrong",
-    });
-  },
-});
+export default setErrorDetails;
