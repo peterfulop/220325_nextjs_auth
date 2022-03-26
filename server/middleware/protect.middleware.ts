@@ -19,8 +19,6 @@ export const protect = async (
       token = req.cookies.jwt;
     }
 
-    console.log(token);
-
     if (!token) {
       throw new Error("notoken");
     }

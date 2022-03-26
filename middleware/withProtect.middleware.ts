@@ -11,7 +11,6 @@ const withProtect = nextConnect<Request, NextApiResponse>({
     const errorObj: ErrorObject = setErrorDetails(error);
     res.status(errorObj.statusCode).send({
       error: errorObj.errorMessage,
-      statusCode: errorObj.statusCode,
     });
   },
   onNoMatch(req, res) {

@@ -3,7 +3,7 @@ import UserService from "../../../server/resources/user/user.service";
 import Request from "../../../utils/interfaces/Request.interface";
 import { createSendToken } from "../../../utils/token";
 import withValidation from "../../../middleware/withValidation.middleware";
-import validation from "../../../server/resources/user/user.validation";
+import { login } from "../../../server/resources/user/user.validation";
 import withoutProtect from "../../../middleware/withoutProtect.middleware";
 
 export default withoutProtect.post(
@@ -22,5 +22,5 @@ export default withoutProtect.post(
     } catch (err: any) {
       throw new Error(err.message);
     }
-  }, validation.login)
+  }, login)
 );

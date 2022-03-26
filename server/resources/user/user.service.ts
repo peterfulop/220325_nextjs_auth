@@ -2,8 +2,6 @@ import { UserCreateOptions, UserUpdateOptions } from "./user.interface";
 import User from "./user.model";
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
-import Request from "../../../utils/interfaces/Request.interface";
-import { NextApiResponse } from "next";
 
 class UserService {
   constructor() {
@@ -31,8 +29,6 @@ class UserService {
       }
       return user;
     } catch (error: any) {
-      console.log("itt", error);
-
       throw new Error(error);
     }
   }

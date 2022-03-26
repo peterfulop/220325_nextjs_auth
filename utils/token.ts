@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken";
 import { NextApiResponse } from "next";
 import Request from "./interfaces/Request.interface";
 import Token from "./interfaces/token.interface";
-import cookie from "cookie";
 import Cookies from "cookies";
 
 export const signToken = (id: string): string => {
