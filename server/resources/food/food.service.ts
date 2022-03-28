@@ -55,6 +55,15 @@ class FoodService extends DBConnection {
     }
   }
 
+  public async getFoodIdList(): Promise<FoodEntryCreateOptions[]> {
+    try {
+      const foods = await Food.distinct("_id", {});
+      return foods;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
   public async getFood(id: string): Promise<FoodEntryCreateOptions> {
     try {
       const food = await Food.findById(id);

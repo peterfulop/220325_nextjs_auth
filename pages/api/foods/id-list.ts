@@ -18,30 +18,6 @@ export default nch.handler
   // })
   .get(async (req: Request, res: NextApiResponse) => {
     const foodService = new FoodService();
-    const { id } = req.query as { id: string };
-    const result = await foodService.getFood(id);
+    const result = await foodService.getFoodIdList();
     res.status(200).json({ status: "success", data: result });
-  })
-  .put(
-    withValidation(async (req: Request, res: NextApiResponse) => {
-      const { name, details } = req.body as FoodEntryUpdateOptions;
-      const { id } = req.query as { id: string };
-      const foodService = new FoodService();
-      const data = await foodService.updateFood(id, { name, details });
-      if (!data) throw Error("nodata");
-      res.status(200).json({
-        status: "success",
-        message: "Document has been updated",
-        data,
-      });
-    }, create)
-  )
-  .delete(async (req: Request, res: NextApiResponse) => {
-    const { id } = req.query as { id: string };
-    const foodService = new FoodService();
-    await foodService.deleteFood(id);
-    res.status(202).json({
-      status: "success",
-      message: "Document has been deleted",
-    });
   });

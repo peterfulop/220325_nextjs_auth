@@ -1,4 +1,4 @@
-import { Document } from 'mongodb';
+import { Document } from "mongodb";
 
 export type FoodEntryDetails = Record<string, { unit: string; amount: number }>;
 

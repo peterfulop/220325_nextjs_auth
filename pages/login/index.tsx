@@ -1,22 +1,18 @@
 import Layout from "../../components/layouts/Layout";
 import LoginForm from "../../components/login/LoginForm";
+import { useCookies } from "react-cookie";
+import Head from "next/head";
 
 const Login = () => {
-  const getFoods = async () => {
-    const res = await fetch("/api/foods");
-    const data = await res.json();
-    console.log(data);
-  };
   return (
-    <Layout>
-      <LoginForm />
-      <input
-        typeof="button"
-        onClick={getFoods}
-        type="button"
-        value={"GET FOODS"}
-      />
-    </Layout>
+    <>
+      <Head>
+        <title>Login</title>
+      </Head>
+      <Layout>
+        <LoginForm />
+      </Layout>
+    </>
   );
 };
 

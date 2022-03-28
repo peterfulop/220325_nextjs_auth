@@ -10,10 +10,10 @@ export const protect = async (
   next: NextHandler
 ) => {
   let token: string | undefined;
+
   if (req.cookies && req.cookies.jwt) {
     token = req.cookies.jwt;
   }
-
   if (!token) {
     throw new Error("notoken");
   }

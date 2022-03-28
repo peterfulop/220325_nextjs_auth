@@ -1,23 +1,23 @@
-import type { NextPage } from "next";
-import Head from "next/head";
+import type { NextPage, NextPageContext } from "next";
 import { Fragment } from "react";
 import Layout from "../components/layouts/Layout";
+import MeetupList from "../components/foods/FoodList";
+import Router from "next/router";
+import myGet from "../utils/myGet";
 
-const Home: NextPage = () => {
+const Home: NextPage = (props: any) => {
   return (
-    <Fragment>
-      <Head>
-        <title>Create Next App</title>
-        <link
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-          crossOrigin="anonymous"
-        />
-      </Head>
-      <Layout>HELLO</Layout>
-    </Fragment>
+    <>
+      <Layout>{/* <MeetupList foods={props.foods} /> */}</Layout>
+    </>
   );
 };
+
+// Home.getInitialProps = async (ctx: NextPageContext) => {
+//   const json = await myGet("http://localhost:3000/api/foods", ctx);
+//   return {
+//     foods: json.data,
+//   };
+// };
 
 export default Home;

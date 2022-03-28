@@ -1,15 +1,17 @@
 import { NextRouter, useRouter } from "next/router";
 import { useState, SyntheticEvent } from "react";
-import AlertColors from "../../utils/alertColors.enum";
-import AlertMessage from "../../utils/alertMessage.type";
-import AlertBox from "../AlertBox";
+import Cookies from "cookies";
+import { useCookies } from "react-cookie";
+import cookie from "cookie";
+import { NextApiRequest } from "next";
 
 const LoginForm = () => {
+  /////////////////////////////////
+
   const router: NextRouter = useRouter();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isThereAlert, setIsThereAlert] = useState<boolean>(false);
-  const [alertMessage, setAlertMessage] = useState<AlertMessage>();
 
   const onLogin = async (event: SyntheticEvent): Promise<any> => {
     event?.preventDefault();
@@ -22,33 +24,14 @@ const LoginForm = () => {
         password,
       }),
     });
+    const data = await res.json();
 
-    console.log(res);
-
-    // const data = await res.json();
-    // console.log(data);
-
-    // setIsThereAlert(true);
-
-    // let message: string;
-
-    // console.log(data.message);
-
-    // if (data.message) {
-    //   message = data.message;
-    // } else {
-    //   console.log("itt", data);
-    //   message = Array(data.error).join("-");
-    // }
-
-    // const alert: AlertMessage = {
-    //   title: data.status,
-    //   color: AlertColors.danger,
-    //   message: message,
-    // };
-
-    // setAlertMessage(alert);
-    // console.log(alertMessage);
+    if (res.status !== 200) {
+      console.log(data.error);
+      alert(data.error);
+      return;
+    }
+    router.push("/");
   };
 
   return (
@@ -84,7 +67,6 @@ const LoginForm = () => {
       <button className="w-100 btn btn-lg btn-primary" type="submit">
         Sign in
       </button>
-      {isThereAlert && <AlertBox details={alertMessage} />}
     </form>
   );
 };

@@ -2,7 +2,7 @@ import HttpExceptions from "../exceptions/http.exception";
 import ErrorObject from "./interfaces/error.interface";
 
 const setErrorDetails = (error: HttpExceptions): ErrorObject => {
-  console.log(error);
+  // console.log(error);
 
   let errorMessage: string = "Internal server error!";
   let statusCode: number = 500;

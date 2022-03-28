@@ -1,13 +1,13 @@
-import Head from "next/head";
-import { Fragment, ReactNode } from "react";
-import Navigation from "../navigation/Navigation";
+import MainNavigation from "../navigation/MainNavigation";
+import classes from "./Layout.module.css";
+import { ReactNode } from "react";
 
 const Layout = (props: { children: ReactNode }) => {
   return (
-    <Fragment>
-      <Navigation />
-      <main>{props.children}</main>
-    </Fragment>
+    <div>
+      <MainNavigation />
+      <main className={classes.main}>{props.children}</main>
+    </div>
   );
 };
 
