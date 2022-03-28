@@ -2,28 +2,18 @@ import { NextApiResponse } from "next";
 import { verifyToken } from "../utils/token";
 import User from "../server/resources/user/user.model";
 import Request from "../utils/interfaces/Request.interface";
-import nextConnect from "next-connect";
-import ErrorObject from "../utils/interfaces/error.interface";
-import setErrorDetails from "../utils/errorDetails";
+import { NextHandler } from "next-connect";
 
-const withProtect = nextConnect<Request, NextApiResponse>({
-  onError(error, req, res) {
-    const errorObj: ErrorObject = setErrorDetails(error);
-    res.status(errorObj.statusCode).send({
-      error: errorObj.errorMessage,
-    });
-  },
-  onNoMatch(req, res) {
-    res.status(500).send({
-      error: "Something went wrong",
-    });
-  },
-}).use(async (req: Request, res: NextApiResponse, next) => {
+export const protect = async (
+  req: Request,
+  res: NextApiResponse,
+  next: NextHandler
+) => {
   let token: string | undefined;
-  console.log("protected middleware rout!");
   if (req.cookies && req.cookies.jwt) {
     token = req.cookies.jwt;
   }
+
   if (!token) {
     throw new Error("notoken");
   }
@@ -34,6 +24,6 @@ const withProtect = nextConnect<Request, NextApiResponse>({
   }
   req.user = activeUser;
   next();
-});
+};
 
-export default withProtect;
+export default protect;

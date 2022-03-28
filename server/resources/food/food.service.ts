@@ -4,21 +4,12 @@ import {
   FoodEntryCreateOptions,
   FoodEntryUpdateOptions,
 } from "./food.interface";
+import Mongoose from "../service/mongoose.service";
 
-class FoodService {
+class FoodService extends Mongoose {
   constructor() {
-    const DB =
-      "mongodb+srv://peterfulop_:MgIK3MQKQuC10xTN@clusterfoodproject.qrpy7.mongodb.net/myFirstDatabase";
-    mongoose
-      .connect(DB)
-      .then(() => {
-        console.log("Online DB connection successful!");
-      })
-      .catch(() => {
-        mongoose.connect(String(process.env.MONGO_LOCAL)).then(() => {
-          console.log("Local DB connection successful!");
-        });
-      });
+    super();
+    this.initialiseDatabaseConnection();
   }
 
   public async createFood(
@@ -58,6 +49,7 @@ class FoodService {
 
   public async getFoods(): Promise<FoodEntryCreateOptions[]> {
     try {
+      console.log("getFoods");
       const foods = await Food.find();
       return foods;
     } catch (error: any) {
@@ -67,6 +59,7 @@ class FoodService {
 
   public async getFood(id: string): Promise<FoodEntryCreateOptions> {
     try {
+      console.log("getFood");
       const food = await Food.findById(id);
       if (!food) throw new Error("nodata");
       return food;

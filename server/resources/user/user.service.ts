@@ -2,21 +2,12 @@ import { UserCreateOptions, UserUpdateOptions } from "./user.interface";
 import User from "./user.model";
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
+import Mongoose from "../service/mongoose.service";
 
-class UserService {
+class UserService extends Mongoose {
   constructor() {
-    const DB =
-      "mongodb+srv://peterfulop_:MgIK3MQKQuC10xTN@clusterfoodproject.qrpy7.mongodb.net/myFirstDatabase";
-    mongoose
-      .connect(DB)
-      .then(() => {
-        console.log("Online DB connection successful!");
-      })
-      .catch(() => {
-        mongoose.connect(String(process.env.MONGO_LOCAL)).then(() => {
-          console.log("Local DB connection successful!");
-        });
-      });
+    super();
+    this.initialiseDatabaseConnection();
   }
 
   public async login(username: string, password: string): Promise<any> {

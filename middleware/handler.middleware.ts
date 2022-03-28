@@ -4,7 +4,7 @@ import nextConnect from "next-connect";
 import Request from "../utils/interfaces/Request.interface";
 import setErrorDetails from "../utils/errorDetails";
 
-const withoutProtect = nextConnect<Request, NextApiResponse>({
+const handler = nextConnect<Request, NextApiResponse>({
   onError(error, req, res) {
     const errorObj: ErrorObject = setErrorDetails(error);
     res.status(errorObj.statusCode).send({
@@ -18,4 +18,4 @@ const withoutProtect = nextConnect<Request, NextApiResponse>({
   },
 });
 
-export default withoutProtect;
+export default handler;
