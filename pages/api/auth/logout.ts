@@ -1,10 +1,12 @@
 import Cookies from "cookies";
 import { NextApiResponse } from "next";
 import Request from "../../../utils/interfaces/Request.interface";
-import handler from "../../../middleware/handler.middleware";
 import protect from "../../../middleware/withProtect.middleware";
+import NextConnectHandler from "../../../middleware/handler.middleware";
 
-export default handler
+const nch = new NextConnectHandler();
+
+export default nch.handler
   .use(protect)
   .post((req: Request, res: NextApiResponse) => {
     const cookies = Cookies(req, res);

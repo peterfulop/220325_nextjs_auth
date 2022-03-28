@@ -1,15 +1,14 @@
 import Food from "../food/food.model";
-import mongoose from "mongoose";
+import DBConnection from "../service/dbConnect";
 import {
   FoodEntryCreateOptions,
   FoodEntryUpdateOptions,
 } from "./food.interface";
-import Mongoose from "../service/mongoose.service";
 
-class FoodService extends Mongoose {
+class FoodService extends DBConnection {
   constructor() {
     super();
-    this.initialiseDatabaseConnection();
+    this.dbConnect();
   }
 
   public async createFood(
@@ -49,7 +48,6 @@ class FoodService extends Mongoose {
 
   public async getFoods(): Promise<FoodEntryCreateOptions[]> {
     try {
-      console.log("getFoods");
       const foods = await Food.find();
       return foods;
     } catch (error: any) {
@@ -59,7 +57,6 @@ class FoodService extends Mongoose {
 
   public async getFood(id: string): Promise<FoodEntryCreateOptions> {
     try {
-      console.log("getFood");
       const food = await Food.findById(id);
       if (!food) throw new Error("nodata");
       return food;

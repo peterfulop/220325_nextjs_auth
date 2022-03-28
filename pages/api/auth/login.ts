@@ -4,9 +4,11 @@ import Request from "../../../utils/interfaces/Request.interface";
 import { createSendToken } from "../../../utils/token";
 import withValidation from "../../../middleware/withValidation.middleware";
 import { login } from "../../../server/resources/user/user.validation";
-import handler from "../../../middleware/handler.middleware";
+import NextConnectHandler from "../../../middleware/handler.middleware";
 
-export default handler.post(
+const nch = new NextConnectHandler();
+
+export default nch.handler.post(
   withValidation(async (req: Request, res: NextApiResponse) => {
     try {
       const { username, password } = req.body;

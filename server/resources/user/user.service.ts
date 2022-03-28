@@ -1,15 +1,13 @@
 import { UserCreateOptions, UserUpdateOptions } from "./user.interface";
 import User from "./user.model";
 import bcrypt from "bcrypt";
-import mongoose from "mongoose";
-import Mongoose from "../service/mongoose.service";
+import DBConnection from "../service/dbConnect";
 
-class UserService extends Mongoose {
+class UserService extends DBConnection {
   constructor() {
     super();
-    this.initialiseDatabaseConnection();
+    this.dbConnect();
   }
-
   public async login(username: string, password: string): Promise<any> {
     try {
       const user = await User.findOne({ username: username }).select(

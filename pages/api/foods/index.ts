@@ -1,15 +1,17 @@
 import Request from "../../../utils/interfaces/Request.interface";
 import { NextApiResponse } from "next";
 import { NextHandler } from "next-connect";
-import handler from "../../../middleware/handler.middleware";
 import withValidation from "../../../middleware/withValidation.middleware";
 import { FoodEntryCreateOptions } from "../../../server/resources/food/food.interface";
 import FoodService from "../../../server/resources/food/food.service";
 import { create } from "../../../server/resources/food/food.validation";
 import protect from "../../../middleware/withProtect.middleware";
 import withRoles from "../../../middleware/withRoles.middleware";
+import NextConnectHandler from "../../../middleware/handler.middleware";
 
-export default handler
+const nch = new NextConnectHandler();
+
+export default nch.handler
   .use(protect)
   .use(async (req: Request, res: NextApiResponse, next: NextHandler) => {
     withRoles(req, res, next, ["user", "admin"]);

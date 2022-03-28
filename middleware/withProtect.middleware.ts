@@ -1,8 +1,8 @@
 import { NextApiResponse } from "next";
 import { verifyToken } from "../utils/token";
-import User from "../server/resources/user/user.model";
 import Request from "../utils/interfaces/Request.interface";
 import { NextHandler } from "next-connect";
+import UserService from "../server/resources/user/user.service";
 
 export const protect = async (
   req: Request,
@@ -18,7 +18,10 @@ export const protect = async (
     throw new Error("notoken");
   }
   const decoded = await verifyToken(token);
-  const activeUser = await User.findById(Object(decoded).id);
+
+  const userService = new UserService();
+
+  const activeUser = await userService.getUser(Object(decoded).id);
   if (!activeUser) {
     throw new Error("nouser");
   }
