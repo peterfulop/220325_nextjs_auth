@@ -41,3 +41,19 @@ a {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+.details {
+  background-color: rgba(255, 235, 168, 0.274) !important;
+}
+
+.food-item {
+  background-color: rgba(211, 197, 151, 0.876) !important;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.not-found {
+  text-align: center;
+}

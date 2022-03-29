@@ -12,7 +12,7 @@ import NextConnectHandler from "../../../middleware/handler.middleware";
 const nch = new NextConnectHandler();
 
 export default nch.handler
-  .use(protect)
+  // .use(protect)
   // .use(async (req: Request, res: NextApiResponse, next: NextHandler) => {
   //   withRoles(req, res, next, ["user", "admin"]);
   // })

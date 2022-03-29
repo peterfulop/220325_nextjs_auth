@@ -1,0 +1,16 @@
+.profile {
+  margin: 3rem auto;
+  text-align: center;
+}
+
+.profile h1 {
+  font-size: 5rem;
+}
+
+.loader {
+  margin: 2rem;
+  text-align: center;
+  font-weight: bold;
+  font-size: 2rem;
+  padding: 5rem;
+}

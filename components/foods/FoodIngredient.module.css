@@ -1,0 +1,33 @@
+.ingredients {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.5rem;
+  cursor: pointer;
+  border-bottom: 0.5px solid rgb(187, 187, 187);
+}
+
+.ingredients:hover {
+  background: rgb(255, 255, 255);
+}
+
+.ingredients p {
+  font-weight: bold;
+  margin: 0.5rem;
+}
+
+.details {
+  display: flex;
+  justify-content: space-between;
+}
+
+.details .amount {
+  font-weight: 500;
+  margin-right: 0.5rem;
+}
+
+.details .unit {
+  font-weight: 500;
+
+  font-style: italic;
+}

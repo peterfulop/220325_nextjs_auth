@@ -10,8 +10,6 @@ const nch = new NextConnectHandler();
 
 export default nch.handler.post(
   withValidation(async (req: Request, res: NextApiResponse) => {
-    console.log("Create user....");
-
     const { username, email, password, passwordConfirm } =
       req.body as UserCreateOptions;
     const userService = new UserService();
@@ -21,10 +19,6 @@ export default nch.handler.post(
       password,
       passwordConfirm,
     });
-
-    console.log(user);
-
-    res.status(201).json({ message: "Created user!" });
-    // createSendToken(user._id as string, 200, req, res);
+    res.status(201).json({ message: "User has been created, you can log in!" });
   }, signup)
 );

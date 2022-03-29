@@ -1,8 +1,13 @@
 import { useState, useRef, FormEvent } from "react";
 import { useRouter } from "next/router";
 
-import { signIn, SignInResponse } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import classes from "./AuthForm.module.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const errorToast = (message: string) => toast.error(message);
+const successToast = (message: string) => toast.success(message);
 
 async function createUser(
   username: string,
@@ -19,11 +24,10 @@ async function createUser(
   });
 
   const data = await response.json();
-  console.log(data);
 
   if (!response.ok) {
     if (data.error) {
-      alert(data.error);
+      errorToast(Array(data.error).join());
     } else {
       throw new Error(data.message || "Something went wrong!");
     }
@@ -46,27 +50,32 @@ function AuthForm() {
   async function submitHandler(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    let enteredEmail: string = emailInputRef.current?.value || "";
-    let enteredUsername: string = usernameInputRef.current?.value || "";
-    let enteredPassword: string = passwordInputRef.current?.value || "";
-    let enteredPasswordConfirm: string =
-      passwordConfirmInputRef.current?.value || "";
+    const enteredEmail = emailInputRef.current?.value as string;
+    const enteredUsername = usernameInputRef.current?.value as string;
+    const enteredPassword = passwordInputRef.current?.value as string;
+    const enteredPasswordConfirm = passwordConfirmInputRef.current
+      ?.value as string;
 
     if (isLogin) {
       const result = await signIn("credentials", {
         redirect: false,
         email: enteredEmail,
         password: enteredPassword,
+        id: "",
       });
 
-      if (!result || result?.error) {
-        alert(result.error);
+      if (!result) {
+        errorToast(Object(result).error);
         return;
       }
-      router.replace("/foods");
-    } else {
-      console.log("Register ág");
 
+      if (Object(result).error) {
+        const errorMessage = Object(result).error;
+        errorToast(errorMessage);
+        return;
+      }
+      router.replace("/");
+    } else {
       try {
         const result = await createUser(
           enteredUsername,
@@ -74,6 +83,9 @@ function AuthForm() {
           enteredPassword,
           enteredPasswordConfirm
         );
+        if (result.message) {
+          successToast(Array(result.message).join());
+        }
       } catch (error) {
         console.log(error);
       }
@@ -124,6 +136,7 @@ function AuthForm() {
             {isLogin ? "Create new account" : "Login with existing account"}
           </button>
         </div>
+        <ToastContainer />
       </form>
     </section>
   );

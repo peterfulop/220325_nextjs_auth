@@ -58,10 +58,18 @@ export default NextAuth({
           user.password
         );
         if (!isValid) {
-          throw new Error("Could not log in!");
+          throw new Error("Invalid Login Credentials!");
         }
 
-        return { email: user.email };
+        return {
+          email: user.email,
+          name: {
+            name: user.username,
+            email: user.email,
+            id: user._id.toString(),
+            role: user.role,
+          },
+        };
       },
     }),
   ],

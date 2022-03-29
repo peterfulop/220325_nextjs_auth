@@ -49,7 +49,7 @@ class UserService extends DBConnection {
     }
   }
 
-  public async updateUser(
+  public async updateMe(
     id: string,
     userUpdate: UserUpdateOptions
   ): Promise<UserCreateOptions> {

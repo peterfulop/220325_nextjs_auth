@@ -1,3 +1,97 @@
-.detail {
+.card {
+  background-color: rgb(248, 243, 224);
+}
+.detail h1 {
   text-align: center;
+}
+
+.detail ul {
+  text-align: center;
+  padding: 0;
+}
+
+.detail li {
+  list-style: none;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.actions {
+  display: flex;
+}
+
+.actions button {
+  color: black;
+  margin-left: 1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  background: transparent;
+  border: 0.5px solid black;
+}
+
+button.edit {
+  border-color: #138ea3;
+}
+button.delete {
+  border-color: tomato;
+}
+
+button.edit:hover {
+  background: #138ea3;
+  border-color: #138ea3;
+  color: white;
+}
+
+button.delete:hover {
+  background: tomato;
+  border-color: tomato;
+  color: white;
+}
+
+.home {
+  color: black;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  border: 0.5px solid gray;
+}
+
+.home:hover {
+  background-color: black;
+  border-color: black;
+  color: white;
+}
+
+.confirmation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirmation p {
+  margin: 0;
+  color: tomato;
+  font-weight: 500;
+}
+
+.confirmation button {
+  color: black;
+  margin-left: 1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  background: transparent;
+  border: 0.5px solid black;
 }

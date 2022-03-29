@@ -3,6 +3,7 @@ import { NextApiResponse } from "next";
 import nextConnect from "next-connect";
 import Request from "../utils/interfaces/Request.interface";
 import setErrorDetails from "../utils/errorDetails";
+import { getSession } from "next-auth/react";
 
 class NextConnectHandler {
   public handler = nextConnect<Request, NextApiResponse>({
@@ -17,6 +18,9 @@ class NextConnectHandler {
         error: "Something went wrong",
       });
     },
+  }).use(async (req, res, next) => {
+    const session = await getSession({ req: req });
+    next();
   });
 }
 

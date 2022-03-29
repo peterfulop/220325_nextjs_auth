@@ -1,14 +1,11 @@
-import { NextApiResponse, NextPage, NextPageContext } from "next";
-import router from "next/router";
 import React from "react";
 import FoodDetail from "../../components/foods/FoodDetail";
 import {
   FoodEntryCreateOptions,
   FoodEntryDetails,
 } from "../../server/resources/food/food.interface";
-import myGet from "../../utils/myGet";
-import Cookies from "cookies";
-import Request from "../../utils/interfaces/Request.interface";
+import { getSession } from "next-auth/react";
+import Fraction from "fraction.js";
 
 const FoodDetails: any = (props: {
   foodData: FoodEntryCreateOptions;
@@ -23,26 +20,34 @@ const FoodDetails: any = (props: {
   );
 };
 
-export async function getStaticPaths() {
-  const res = await fetch(`http://localhost:3000/api/foods/id-list`);
-  const data = await res.json();
-
-  return {
-    fallback: false,
-    paths: data.data.map((id: string) => ({
-      params: { id: id },
-    })),
-  };
-}
-
-export async function getStaticProps(context: any) {
+export async function getServerSideProps(context: any) {
+  const session = await getSession({ req: context.req });
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
   const foodId = await context.params.id;
+
   const res = await fetch(`http://localhost:3000/api/foods/${foodId}`);
+  if (res.status !== 200) {
+    return {
+      redirect: {
+        destination: "/404",
+        permanent: false,
+      },
+    };
+  }
+
   const data = await res.json();
-  console.log(data.data);
   const details = getDetails(data.data.details);
+
   return {
     props: {
+      session,
       foodData: data.data,
       details: details,
     },
@@ -51,10 +56,12 @@ export async function getStaticProps(context: any) {
 
 const getDetails = (details: any) => {
   return Object.keys(details).map((key) => {
+    var original = new Fraction(details[key]["amount"]);
+    var amount = original.toFraction(false);
     return {
       [key]: {
         unit: details[key]["unit"],
-        amount: details[key]["amount"],
+        amount,
       },
     };
   });

@@ -1,14 +1,29 @@
+import Head from "next/head";
+import Link from "next/link";
 import Router from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FoodEntryDetails } from "../../server/resources/food/food.interface";
 import Layout from "../layouts/Layout";
+import Card from "../ui/Card";
 import classes from "./FoodDetail.module.css";
+import FoodIngredient from "./FoodDetailItem";
+import { Modal, Box, Typography } from "@mui/material";
+
+import "react-toastify/dist/ReactToastify.css";
+import FormDialog from "../ui/FormDialog";
+import FoodEditDialog from "./FoodEditDialog";
 
 export default function FoodDetail(props: {
   name: string;
   details: FoodEntryDetails[];
   id: string;
 }) {
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+
+  const deleteFoodHandler = () => {
+    setDeleteConfirmation((prev) => true);
+  };
+
   const onDeleteFood = async () => {
     const foodId = props.id;
     const res = await fetch(`/api/foods/${foodId}`, {
@@ -20,6 +35,7 @@ export default function FoodDetail(props: {
       alert(data.error);
       return;
     }
+    setDeleteConfirmation((prev) => false);
     Router.push("/");
   };
 
@@ -28,28 +44,60 @@ export default function FoodDetail(props: {
   };
 
   return (
-    <Layout>
+    <Card className={classes.card}>
+      <FoodEditDialog foodName={props.name} onSubmitHandler={onEditFood} />
+      <Head>
+        <title>{props.name}</title>
+      </Head>
       <section className={classes.detail}>
         <h1>{props.name}</h1>
         <ul>
           {props.details.map((detail: FoodEntryDetails) => (
-            <li key={Object.keys(detail)[0]}>
-              <p>{Object.keys(detail)[0]}</p>
-              <span>{Object.values(detail)[0]["amount"]}</span>
-              <span>{Object.values(detail)[0]["unit"]}</span>
-            </li>
+            <FoodIngredient
+              key={Object.keys(detail)[0]}
+              name={Object.keys(detail)[0]}
+              amount={String(Object.values(detail)[0]["amount"])}
+              unit={String(Object.values(detail)[0]["unit"])}
+            />
           ))}
         </ul>
-        <button
-          onClick={(event: React.MouseEvent<HTMLElement>) => onEditFood(event)}
-        >
-          Edit Food
-        </button>
-        <br></br>
-        <button type="submit" onClick={onDeleteFood}>
-          Delete Food
-        </button>
+        <section className={classes.footer}>
+          <Link href="/" passHref>
+            <button className={classes.home}>Foods</button>
+          </Link>
+
+          {!deleteConfirmation && (
+            <section className={classes.actions}>
+              <button
+                className={classes.edit}
+                onClick={(event: React.MouseEvent<HTMLElement>) =>
+                  onEditFood(event)
+                }
+              >
+                Edit
+              </button>
+              <br></br>
+              <button className={classes.delete} onClick={deleteFoodHandler}>
+                Delete
+              </button>
+            </section>
+          )}
+          {deleteConfirmation && (
+            <section className={classes.confirmation}>
+              <p>Delete the current food?</p>
+              <button className={classes.delete} onClick={onDeleteFood}>
+                Yes
+              </button>
+              <button
+                className={classes.edit}
+                onClick={() => setDeleteConfirmation(false)}
+              >
+                No
+              </button>
+            </section>
+          )}
+        </section>
       </section>
-    </Layout>
+    </Card>
   );
 }

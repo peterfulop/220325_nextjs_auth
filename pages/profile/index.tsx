@@ -1,19 +1,18 @@
+import UserProfile from "../../components/profile/UserProfile";
 import { getSession } from "next-auth/react";
 import Head from "next/head";
 import { Fragment } from "react";
-import FoodList from "../components/foods/FoodList";
 
-const Home = (props: any): JSX.Element => {
+function ProfilePage(props: any) {
   return (
     <Fragment>
       <Head>
-        <title>Home</title>
+        <title>Profile</title>
       </Head>
-      <h2>My Foods</h2>
-      <FoodList foods={props.foods} />
+      <UserProfile user={props.session.user} />
     </Fragment>
   );
-};
+}
 
 export async function getServerSideProps(context: any) {
   const session = await getSession({ req: context.req });
@@ -25,10 +24,9 @@ export async function getServerSideProps(context: any) {
       },
     };
   }
-  const response = await fetch("http://localhost:3000/api/foods");
-  const foods = await response.json();
   return {
-    props: { session, foods: foods.data },
+    props: { session },
   };
 }
-export default Home;
+
+export default ProfilePage;

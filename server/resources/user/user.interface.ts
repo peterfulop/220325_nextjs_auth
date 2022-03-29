@@ -11,12 +11,14 @@ export interface UserCreateOptions extends Document {
   email: string;
   password: string;
   passwordConfirm: string;
-  roles?: Roles.user;
+  role?: Roles.user;
 }
 
 export interface UserUpdateOptions extends Document {
   username?: string;
   email?: string;
+  password?: string;
+  passwordConfirm?: string;
 }
 
 export interface UserOptions extends Document {

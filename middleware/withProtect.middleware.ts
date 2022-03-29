@@ -5,6 +5,7 @@ import { NextHandler } from "next-connect";
 import UserService from "../server/resources/user/user.service";
 import { getSession } from "next-auth/react";
 import { hasPassword, verifyPassword } from "../lib/auth";
+import { ObjectId } from "mongodb";
 
 export const protect = async (
   req: Request,
@@ -12,6 +13,7 @@ export const protect = async (
   next: NextHandler
 ) => {
   const session = await getSession({ req: req });
+
   if (!session) {
     return res.status(401).json({
       message: "Not authenticated!!!!",
@@ -26,7 +28,13 @@ export const protect = async (
       message: "User not found!",
     });
   }
-  req.user = activeUser;
+
+  req.user = {
+    email: activeUser.email,
+    id: activeUser._id?.toString(),
+    username: activeUser.username,
+    role: activeUser.role?.toString(),
+  };
   next();
 };
 

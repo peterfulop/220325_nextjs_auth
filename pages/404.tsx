@@ -5,7 +5,9 @@ import Layout from "../components/layouts/Layout";
 const PageNotFound = () => {
   return (
     <Fragment>
-      <h1>404, Page not found! :( </h1>
+      <section className="not-found">
+        <h1>404, Page not found! :( </h1>
+      </section>
     </Fragment>
   );
 };
