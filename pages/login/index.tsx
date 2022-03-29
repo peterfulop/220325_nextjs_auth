@@ -1,19 +1,26 @@
-import Layout from "../../components/layouts/Layout";
-import LoginForm from "../../components/login/LoginForm";
-import { useCookies } from "react-cookie";
-import Head from "next/head";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { getSession } from "next-auth/react";
+import AuthForm from "../../components/auth/AuthForm";
 
 const Login = () => {
-  return (
-    <>
-      <Head>
-        <title>Login</title>
-      </Head>
-      <Layout>
-        <LoginForm />
-      </Layout>
-    </>
-  );
+  const [isLoading, setIsloading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    getSession().then((session) => {
+      if (session) {
+        router.replace("/");
+      } else {
+        setIsloading(false);
+      }
+    });
+  }, [router]);
+
+  if (isLoading) {
+    return <p>Loading....</p>;
+  }
+  return <AuthForm />;
 };
 
 export default Login;

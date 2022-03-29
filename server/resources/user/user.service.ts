@@ -40,9 +40,9 @@ class UserService extends DBConnection {
     }
   }
 
-  public async getUser(id: string): Promise<UserCreateOptions> {
+  public async getUser(email: string): Promise<UserCreateOptions> {
     try {
-      const user = await User.findById(id);
+      const user = await User.findOne({ email: email }).select("+password");
       return user;
     } catch (error: any) {
       throw new Error(error.message);

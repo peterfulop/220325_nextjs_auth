@@ -1,12 +1,12 @@
 import type { NextPage } from "next";
 import { Fragment } from "react";
 
-const Home = (): JSX.Element => {
+const Foods = (): JSX.Element => {
   return (
     <Fragment>
-      <h2>This is my Nextjs Food Project!</h2>
+      <h2>My food page</h2>
     </Fragment>
   );
 };
 
-export default Home;
+export default Foods;

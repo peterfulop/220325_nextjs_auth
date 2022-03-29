@@ -7,7 +7,6 @@ import setErrorDetails from "../utils/errorDetails";
 class NextConnectHandler {
   public handler = nextConnect<Request, NextApiResponse>({
     onError(error, req, res) {
-      // console.log(error);
       const errorObj: ErrorObject = setErrorDetails(error);
       res.status(errorObj.statusCode).send({
         error: errorObj.errorMessage,

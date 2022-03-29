@@ -1,12 +1,14 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import { Fragment } from "react";
 import { SessionProvider } from "next-auth/react";
+import Layout from "../components/layouts/Layout";
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <SessionProvider session={session}>
-      <Component {...pageProps} />
+    <SessionProvider session={pageProps.session}>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </SessionProvider>
   );
 }
