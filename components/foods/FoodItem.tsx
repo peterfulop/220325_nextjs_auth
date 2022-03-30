@@ -1,8 +1,7 @@
-import Card from "../ui/Card";
 import classes from "./FoodItem.module.css";
 import { useRouter } from "next/router";
 import React from "react";
-import Image from "next/image";
+import Button from "@mui/material/Button";
 
 const FoodItem = (props: any) => {
   const router = useRouter();
@@ -14,10 +13,12 @@ const FoodItem = (props: any) => {
   return (
     <li className={classes.item}>
       <div className={classes.content}>
-        <h3>{props.name}</h3>
+        <h2>{props.name}</h2>
       </div>
       <div className={classes.actions}>
-        <button onClick={showDetailsHandler}>Show Details</button>
+        <Button variant="contained" color="info" onClick={showDetailsHandler}>
+          Show Details
+        </Button>
       </div>
     </li>
   );

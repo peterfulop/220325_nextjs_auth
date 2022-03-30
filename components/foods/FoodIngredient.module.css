@@ -8,11 +8,11 @@
 }
 
 .ingredients:hover {
-  background: rgb(255, 255, 255);
+  background: rgb(235, 235, 235);
 }
 
 .ingredients p {
-  font-weight: bold;
+  font-weight: 500;
   margin: 0.5rem;
 }
 
@@ -22,12 +22,12 @@
 }
 
 .details .amount {
-  font-weight: 500;
+  font-weight: 400;
   margin-right: 0.5rem;
 }
 
 .details .unit {
-  font-weight: 500;
+  font-weight: 400;
 
   font-style: italic;
 }

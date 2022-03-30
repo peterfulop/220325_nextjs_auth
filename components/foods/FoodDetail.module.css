@@ -1,6 +1,3 @@
-.card {
-  background-color: rgb(248, 243, 224);
-}
 .detail h1 {
   text-align: center;
 }
@@ -25,34 +22,7 @@
 }
 
 .actions button {
-  color: black;
   margin-left: 1rem;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  background: transparent;
-  border: 0.5px solid black;
-}
-
-button.edit {
-  border-color: #138ea3;
-}
-button.delete {
-  border-color: tomato;
-}
-
-button.edit:hover {
-  background: #138ea3;
-  border-color: #138ea3;
-  color: white;
-}
-
-button.delete:hover {
-  background: tomato;
-  border-color: tomato;
-  color: white;
 }
 
 .home {

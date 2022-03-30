@@ -31,6 +31,7 @@ export default nch.handler
   .post(
     withValidation(async (req: Request, res: NextApiResponse) => {
       const { name, details } = req.body as FoodEntryCreateOptions;
+      console.log(name, details);
       const foodService = new FoodService();
       const data = await foodService.createFood({ name, details });
       res.status(201).json({ status: "success", data });

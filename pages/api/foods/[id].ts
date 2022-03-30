@@ -5,7 +5,7 @@ import FoodService from "../../../server/resources/food/food.service";
 import withRoles from "../../../middleware/withRoles.middleware";
 import { FoodEntryUpdateOptions } from "../../../server/resources/food/food.interface";
 import withValidation from "../../../middleware/withValidation.middleware";
-import { create } from "../../../server/resources/food/food.validation";
+import { update } from "../../../server/resources/food/food.validation";
 import protect from "../../../middleware/withProtect.middleware";
 import NextConnectHandler from "../../../middleware/handler.middleware";
 
@@ -25,6 +25,7 @@ export default nch.handler
   .put(
     withValidation(async (req: Request, res: NextApiResponse) => {
       const { name, details } = req.body as FoodEntryUpdateOptions;
+
       const { id } = req.query as { id: string };
       const foodService = new FoodService();
       const data = await foodService.updateFood(id, { name, details });
@@ -34,7 +35,7 @@ export default nch.handler
         message: "Document has been updated",
         data,
       });
-    }, create)
+    }, update)
   )
   .delete(async (req: Request, res: NextApiResponse) => {
     const { id } = req.query as { id: string };

@@ -1,29 +1,28 @@
 import Head from "next/head";
 import Link from "next/link";
 import Router from "next/router";
-import React, { useState } from "react";
+import React from "react";
 import { FoodEntryDetails } from "../../server/resources/food/food.interface";
-import Layout from "../layouts/Layout";
 import Card from "../ui/Card";
 import classes from "./FoodDetail.module.css";
 import FoodIngredient from "./FoodDetailItem";
-import { Modal, Box, Typography } from "@mui/material";
-
+import { FoodEntryUpdateOptions } from "../../server/resources/food/food.interface";
 import "react-toastify/dist/ReactToastify.css";
-import FormDialog from "../ui/FormDialog";
 import FoodEditDialog from "./FoodEditDialog";
+import FoodDeleteDialog from "./FoodDeleteDialog";
+import Button from "@mui/material/Button";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const errorToast = (message: string) => toast.error(message);
+const successToast = (message: string) => toast.success(message);
 
 export default function FoodDetail(props: {
   name: string;
   details: FoodEntryDetails[];
   id: string;
 }) {
-  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
-
-  const deleteFoodHandler = () => {
-    setDeleteConfirmation((prev) => true);
-  };
-
   const onDeleteFood = async () => {
     const foodId = props.id;
     const res = await fetch(`/api/foods/${foodId}`, {
@@ -35,17 +34,28 @@ export default function FoodDetail(props: {
       alert(data.error);
       return;
     }
-    setDeleteConfirmation((prev) => false);
     Router.push("/");
   };
 
-  const onEditFood = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
+  const onEditFood = async (name: string) => {
+    const foodId = props.id;
+    const res = await fetch(`/api/foods/${foodId}`, {
+      method: "PUT",
+      credentials: "include",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify({ name, details: props.details }),
+    });
+    const data = await res.json();
+
+    if (data.status !== "success") {
+      errorToast(Array(data.error).join());
+      return;
+    }
+    successToast(data.message);
   };
 
   return (
-    <Card className={classes.card}>
-      <FoodEditDialog foodName={props.name} onSubmitHandler={onEditFood} />
+    <Card>
       <Head>
         <title>{props.name}</title>
       </Head>
@@ -63,41 +73,20 @@ export default function FoodDetail(props: {
         </ul>
         <section className={classes.footer}>
           <Link href="/" passHref>
-            <button className={classes.home}>Foods</button>
+            <Button variant="outlined" color="primary">
+              Foods
+            </Button>
           </Link>
-
-          {!deleteConfirmation && (
-            <section className={classes.actions}>
-              <button
-                className={classes.edit}
-                onClick={(event: React.MouseEvent<HTMLElement>) =>
-                  onEditFood(event)
-                }
-              >
-                Edit
-              </button>
-              <br></br>
-              <button className={classes.delete} onClick={deleteFoodHandler}>
-                Delete
-              </button>
-            </section>
-          )}
-          {deleteConfirmation && (
-            <section className={classes.confirmation}>
-              <p>Delete the current food?</p>
-              <button className={classes.delete} onClick={onDeleteFood}>
-                Yes
-              </button>
-              <button
-                className={classes.edit}
-                onClick={() => setDeleteConfirmation(false)}
-              >
-                No
-              </button>
-            </section>
-          )}
+          <section className={classes.actions}>
+            <FoodEditDialog foodName={props.name} submitAction={onEditFood} />
+            <FoodDeleteDialog
+              foodName={props.name}
+              submitAction={onDeleteFood}
+            />
+          </section>
         </section>
       </section>
+      <ToastContainer />
     </Card>
   );
 }

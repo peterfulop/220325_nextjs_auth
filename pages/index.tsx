@@ -9,7 +9,6 @@ const Home = (props: any): JSX.Element => {
       <Head>
         <title>Home</title>
       </Head>
-      <h2>My Foods</h2>
       <FoodList foods={props.foods} />
     </Fragment>
   );

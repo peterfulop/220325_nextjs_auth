@@ -5,6 +5,7 @@ import { signIn } from "next-auth/react";
 import classes from "./AuthForm.module.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import TextField from "@mui/material/TextField";
 
 const errorToast = (message: string) => toast.error(message);
 const successToast = (message: string) => toast.success(message);
@@ -36,10 +37,11 @@ async function createUser(
 }
 
 function AuthForm() {
-  const emailInputRef = useRef<HTMLInputElement>(null);
-  const usernameInputRef = useRef<HTMLInputElement>(null);
-  const passwordInputRef = useRef<HTMLInputElement>(null);
-  const passwordConfirmInputRef = useRef<HTMLInputElement>(null);
+  const [username, setUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [passwordConfirm, setPasswordConfirm] = useState<string>("");
+
   const [isLogin, setIsLogin] = useState(true);
   const router = useRouter();
 
@@ -50,17 +52,11 @@ function AuthForm() {
   async function submitHandler(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const enteredEmail = emailInputRef.current?.value as string;
-    const enteredUsername = usernameInputRef.current?.value as string;
-    const enteredPassword = passwordInputRef.current?.value as string;
-    const enteredPasswordConfirm = passwordConfirmInputRef.current
-      ?.value as string;
-
     if (isLogin) {
       const result = await signIn("credentials", {
         redirect: false,
-        email: enteredEmail,
-        password: enteredPassword,
+        email,
+        password,
         id: "",
       });
 
@@ -78,13 +74,17 @@ function AuthForm() {
     } else {
       try {
         const result = await createUser(
-          enteredUsername,
-          enteredEmail,
-          enteredPassword,
-          enteredPasswordConfirm
+          username as string,
+          email as string,
+          password as string,
+          passwordConfirm as string
         );
         if (result.message) {
           successToast(Array(result.message).join());
+          setUsername((prev) => "");
+          setEmail((prev) => "");
+          setPassword((prev) => "");
+          setPasswordConfirm((prev) => "");
         }
       } catch (error) {
         console.log(error);
@@ -98,31 +98,53 @@ function AuthForm() {
       <form onSubmit={(e) => submitHandler(e)}>
         {!isLogin && (
           <div className={classes.control}>
-            <label htmlFor="text">Your Name</label>
-            <input type="text" id="text" ref={usernameInputRef} required />
+            <TextField
+              className="w-100"
+              type="text"
+              label="Name"
+              variant="outlined"
+              required
+              id="name"
+              value={username}
+              onChange={(e) => setUsername((prev) => e.target.value)}
+            />
           </div>
         )}
         <div className={classes.control}>
-          <label htmlFor="email">Your Email</label>
-          <input type="email" id="email" ref={emailInputRef} required />
+          <TextField
+            className="w-100"
+            type="email"
+            label="Email"
+            variant="outlined"
+            required
+            id="email"
+            value={email}
+            onChange={(e) => setEmail((prev) => e.target.value)}
+          />
         </div>
         <div className={classes.control}>
-          <label htmlFor="password">Your Password</label>
-          <input
+          <TextField
+            className="w-100"
             type="password"
-            id="password"
-            ref={passwordInputRef}
+            label="Password"
+            variant="outlined"
             required
+            id="password"
+            value={password}
+            onChange={(e) => setPassword((prev) => e.target.value)}
           />
         </div>
         {!isLogin && (
           <div className={classes.control}>
-            <label htmlFor="password">Your Password Confirmation</label>
-            <input
+            <TextField
+              className="w-100"
               type="password"
-              id="password"
-              ref={passwordConfirmInputRef}
+              label="Password Confirmation"
+              variant="outlined"
               required
+              id="password"
+              value={passwordConfirm}
+              onChange={(e) => setPasswordConfirm((prev) => e.target.value)}
             />
           </div>
         )}

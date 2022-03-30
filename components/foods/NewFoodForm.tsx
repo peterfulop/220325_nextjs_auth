@@ -4,6 +4,8 @@ import React, { FormEvent, useState } from "react";
 import { FoodEntryCreateOptions } from "../../server/resources/food/food.interface";
 import Card from "../ui/Card";
 import classes from "./NewFoodForm.module.css";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,6 +21,7 @@ const addFoodHandler = async (
     "foodDetailKey",
     enteredIngredient
   );
+
   const res = await fetch("/api/foods", {
     method: "POST",
     headers: { "Content-type": "application/json" },
@@ -28,7 +31,7 @@ const addFoodHandler = async (
   const data = await res.json();
 
   if (res.status !== 201) {
-    errorToast(data.error);
+    errorToast(Array(data.error).join());
     return;
   }
   if (data.status === "success") {
@@ -38,35 +41,30 @@ const addFoodHandler = async (
 };
 
 function NewFoodForm(): JSX.Element {
-  const nameInputRef = React.useRef<HTMLInputElement>(null);
-  const ingredientInputRef = React.useRef<HTMLInputElement>(null);
-  const unitInputRef = React.useRef<HTMLInputElement>(null);
-  const amountInputRef = React.useRef<HTMLInputElement>(null);
-
   const [name, setName] = useState<string>("");
   const [ingrdient, setIngrdient] = useState<string>("");
   const [unit, setUnit] = useState<string>("");
   const [amount, setAmount] = useState<string>("");
 
-  const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const submitHandler = async (event: FormEvent<HTMLFormElement> | null) => {
+    event?.preventDefault();
 
-    const enteredName = nameInputRef.current?.value as string;
-    const enteredIngredient = ingredientInputRef.current?.value as string;
-    const enteredUnit = unitInputRef.current?.value as string;
-    const enteredAmount = amountInputRef.current?.value as string;
+    if (!name || !ingrdient || !unit || !amount) {
+      errorToast("All fields are required!");
 
-    const meetupData: FoodEntryCreateOptions = {
-      name: String(enteredName),
+      return;
+    }
+    const foodData: FoodEntryCreateOptions = {
+      name: String(name),
       details: {
         foodDetailKey: {
-          unit: String(enteredUnit),
-          amount: Number(enteredAmount),
+          unit: String(unit),
+          amount: Number(amount),
         },
       },
     };
 
-    const res = await addFoodHandler(meetupData, enteredIngredient as string);
+    const res = await addFoodHandler(foodData, ingrdient);
 
     if (res) {
       setName((prev) => "");
@@ -79,17 +77,18 @@ function NewFoodForm(): JSX.Element {
   return (
     <Card>
       <Head>
-        <title>Create New Food</title>
+        <title>Add Food</title>
       </Head>
       <form className={classes.form} onSubmit={(e) => submitHandler(e)}>
-        <h2>Create a new Food</h2>
+        <h2>Add new Food</h2>
         <div className={classes.control}>
-          <label htmlFor="name">Food Name</label>
-          <input
+          <TextField
+            className="w-100"
+            label="Name"
+            variant="outlined"
             type="text"
             required
             id="name"
-            ref={nameInputRef}
             value={name}
             onChange={(e) => {
               setName(e.target.value);
@@ -97,12 +96,12 @@ function NewFoodForm(): JSX.Element {
           />
         </div>
         <div className={classes.control}>
-          <label htmlFor="Ingredient">Ingredient</label>
-          <input
-            type="text"
+          <TextField
+            className="w-100"
+            label="Ingredient"
+            variant="outlined"
             required
-            id="Ingredient"
-            ref={ingredientInputRef}
+            id="ingredient"
             value={ingrdient}
             onChange={(e) => {
               setIngrdient(e.target.value);
@@ -110,12 +109,13 @@ function NewFoodForm(): JSX.Element {
           />
         </div>
         <div className={classes.control}>
-          <label htmlFor="unit">Unit</label>
-          <input
+          <TextField
+            className="w-100"
             type="text"
+            label="Unit"
+            variant="outlined"
             required
             id="unit"
-            ref={unitInputRef}
             value={unit}
             onChange={(e) => {
               setUnit(e.target.value);
@@ -123,12 +123,13 @@ function NewFoodForm(): JSX.Element {
           />
         </div>
         <div className={classes.control}>
-          <label htmlFor="amount">Amount</label>
-          <input
+          <TextField
+            className="w-100"
+            label="Amount"
             type="number"
+            variant="outlined"
             required
             id="amount"
-            ref={amountInputRef}
             value={amount}
             onChange={(e) => {
               setAmount(e.target.value);
@@ -137,7 +138,13 @@ function NewFoodForm(): JSX.Element {
         </div>
 
         <div className={classes.actions}>
-          <button>Add Food</button>
+          <Button
+            variant="contained"
+            type="button"
+            onClick={() => submitHandler(null)}
+          >
+            Add Food
+          </Button>
         </div>
       </form>
       <ToastContainer />

@@ -8,12 +8,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 export default function FormDialog(props: {
-  title: string;
-  children: any;
-  buttonTitle: string;
-  buttonCancelTitle?: string;
-  buttonSubmitTitle?: string;
-  onSubmitHandler: Function;
+  foodName: string;
+  submitAction: Function;
 }) {
   const [open, setOpen] = React.useState(false);
 
@@ -26,24 +22,28 @@ export default function FormDialog(props: {
   };
 
   const handleAction = async () => {
-    await props.onSubmitHandler();
+    await props.submitAction();
     setOpen(false);
   };
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        {props.buttonTitle}
+      <Button variant="contained" color="error" onClick={handleClickOpen}>
+        {"Delete"}
       </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{props.title}</DialogTitle>
-        {props.children}
+        <DialogTitle>{`Delete ${props.foodName}`}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Do you really want to delete this food?
+          </DialogContentText>
+        </DialogContent>
         <DialogActions>
           <Button variant="outlined" color="primary" onClick={handleClose}>
             Cancel
           </Button>
           <Button variant="contained" color="error" onClick={handleAction}>
-            Save
+            Delete
           </Button>
         </DialogActions>
       </Dialog>
